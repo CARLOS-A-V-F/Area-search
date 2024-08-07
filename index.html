@@ -26,12 +26,15 @@
       $('#wardSearchForm').on('submit', function(event) {
         event.preventDefault();
         var wardName = $('#wardName').val();
-        var apiUrl = 'https://api.os.uk/search/names/v1/{path}?key=DDOHufnb5YsTfeTEdFa36RzRaUFG1Ap2' + encodeURIComponent(wardName);
+        var apiUrl = 'https://api.example.com/getWardInfo?wardName=' + encodeURIComponent(wardName);
+
+        console.log('API URL:', apiUrl);
 
         $.ajax({
           url: apiUrl,
           method: 'GET',
           success: function(data) {
+            console.log('API response:', data);
             if (data.success) {
               $('#county').text('County: ' + data.county);
               $('#localAuthorityCode').text('Local Authority Code: ' + data.localAuthorityCode);
@@ -40,7 +43,8 @@
               $('#localAuthorityCode').text('Local Authority Code: Not found');
             }
           },
-          error: function() {
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error details:', textStatus, errorThrown);
             $('#county').text('County: Error retrieving data');
             $('#localAuthorityCode').text('Local Authority Code: Error retrieving data');
           }
