@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ward Info Search</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    #results { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Search for Ward Information</h1>
+  <form id="wardSearchForm">
+    <label for="wardName">Enter Ward Name:</label>
+    <input type="text" id="wardName" name="wardName" required>
+    <button type="submit">Search</button>
+  </form>
+  <div id="results">
+    <h2>Results</h2>
+    <p id="county"></p>
+    <p id="localAuthorityCode"></p>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      $('#wardSearchForm').on('submit', function(event) {
+        event.preventDefault();
+        var wardName = $('#wardName').val();
+        var apiUrl = 'https://api.os.uk/search/names/v1/{path}?key=DDOHufnb5YsTfeTEdFa36RzRaUFG1Ap2' + encodeURIComponent(wardName);
+
+        $.ajax({
+          url: apiUrl,
+          method: 'GET',
+          success: function(data) {
+            if (data.success) {
+              $('#county').text('County: ' + data.county);
+              $('#localAuthorityCode').text('Local Authority Code: ' + data.localAuthorityCode);
+            } else {
+              $('#county').text('County: Not found');
+              $('#localAuthorityCode').text('Local Authority Code: Not found');
+            }
+          },
+          error: function() {
+            $('#county').text('County: Error retrieving data');
+            $('#localAuthorityCode').text('Local Authority Code: Error retrieving data');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
